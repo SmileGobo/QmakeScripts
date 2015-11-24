@@ -1,4 +1,4 @@
-icnlude(projects.pri)
+include(projects.pri)
 include(depends.pri)
 
 #общие библиотеки
