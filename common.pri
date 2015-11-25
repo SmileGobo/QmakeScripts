@@ -35,7 +35,7 @@ defineTest(CopyHeaders){
     CLEAN_COMMAND = $$QMAKE_DEL_FILE $$INC_PATH/*
     system($$CLEAN_COMMAND)
 
-    COPY_COMMAND = $$QMAKE_COPY ./include/* $$INC_PATH
+    COPY_COMMAND = $$QMAKE_COPY ./include/* $$INC_PATH -r
     system($$COPY_COMMAND)
 
     #QMAKE_EXTRA_TARGETS += mytarget
