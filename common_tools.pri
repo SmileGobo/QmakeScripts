@@ -1,4 +1,4 @@
-include(projects.pri)
+include(project_tools.pri)
 include(depend_tools.pri)
 
 #общие библиотеки

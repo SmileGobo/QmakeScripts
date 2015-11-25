@@ -26,7 +26,6 @@ defineTest(ConsoleApplication){
 
     INCLUDEPATH += \
         ./include  \
-        $$BUILD_PATH/include
 
     #если объявлен путь к внешним инклудам
     !isEmpty(EXTERNAL_INC_PATH){
