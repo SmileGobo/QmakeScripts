@@ -87,3 +87,9 @@ defineTest(EnableDebugSuffix){
     export(LIB_SUFFIX)
     return(true)
 }
+
+#поиск и подключение файлов зависимостей
+#TODO допилить
+defineTest(GetDepends){
+    return(false)
+}
