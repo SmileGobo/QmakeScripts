@@ -1,5 +1,5 @@
-include(project_tools.pri)
-include(depend_tools.pri)
+load(common/project_tools)
+load(common/depend_tools)
 
 #общие библиотеки
 
