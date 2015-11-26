@@ -24,7 +24,7 @@ defineTest(Init){
     #настройки проекта глобальные
     #базовая дирректория может быть переопределена в user_settings
 
-    BUILD_PATH=$$absolute_path($${BASE_PATH}/../build/$$_TARGET)
+    BUILD_PATH=$$absolute_path($${BASE_PATH}/$$_TARGET)
 
     LIB_DIR=$$BUILD_PATH/lib     #дирректория для складирования модулей подсистем
     OBJ_DIR=$$BUILD_PATH/obj     #дирректория для разделеной линковки подсистем и тестов и приложений
