@@ -6,7 +6,52 @@ load(common/depend_tools)
 #инициализация вызвать в начале проекта
 #пока используется include(settings.pri)
 defineTest(Init){
+    BASE_PATH = $$1
+    isEmpty(BASE_PATH){
+        error(Init function: not target BASE_PATH)
+    }
+    CONFIG += no_include_pwd
+    CONFIG += C++11
 
+    CONFIG(debug, debug|release) {
+        BUILD_TYPE=debug
+        DEFINES+= _DEBUG        # в коде тоже должны знать что у нас отладка
+        LIB_SUFFIX=d
+    } else {
+        LIB_SUFFIX=                 #суффикс для библиотек d - для дебаг и пустой для release
+        BUILD_TYPE=release          #тип сборки отладочная или релизная
+    }
+    #настройки проекта глобальные
+    #базовая дирректория может быть переопределена в user_settings
+
+    BUILD_PATH=$$absolute_path($${BASE_PATH}/../build/$$_TARGET)
+
+    LIB_DIR=$$BUILD_PATH/lib     #дирректория для складирования модулей подсистем
+    OBJ_DIR=$$BUILD_PATH/obj     #дирректория для разделеной линковки подсистем и тестов и приложений
+    BIN_DIR=$$BUILD_PATH/bin     #дира для исполняемых файлов
+
+
+    win32{
+        DEFINES+=WIN32_
+        QMAKE_CXXFLAGS += /wd4482  #отключает некорректный варининг в 10 студии
+    }
+
+    #если есть пользовательские настройки подключаем
+    USER_SETTINGS = $${BASE_PATH}/../user_settings.pri
+    exists($$USER_SETTINGS){
+        include($$USER_SETTINGS)
+    }
+    export(CONFIG)
+    export(BUILD_PATH)
+    export(DEFINES)
+    export(QMAKE_CXXFLAGS)
+    export(BUILD_TYPE)
+    export(LIB_SUFFIX)
+    export(BIN_DIR)
+    export(OBJ_DIR)
+    export(LIB_DIR)
+
+    return (true)
 }
 
 #Цель make install 
