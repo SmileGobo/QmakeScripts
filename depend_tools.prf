@@ -4,12 +4,14 @@
 defineTest(SetHeadersPath){
     PATHS = $$1 #Cписок путей
     isEmpty(PATHS){
-        warning(SetHeadersPath: empty 1 arg)
+        WARNING(SetHeadersPath: empty 1 arg)
         return (false)
     }
 
     for(p, PATHS){
-        INCLUDEPATH += $$p
+        !contains(INCLUDEPATH, $$p){
+            INCLUDEPATH += $$p
+        }
     }
     export(INCLUDEPATH)
     return(true)
@@ -23,7 +25,9 @@ defineTest(SetLibraryPath){
         return (false)
     }
     for(p, PATHS){
-        LIBS += -L$$p
+        !contains(LIBS, -L$$p){
+            LIBS += -L$$p
+        }
     }
     export(LIBS)
     return (true)

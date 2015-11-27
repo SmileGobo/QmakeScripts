@@ -1,0 +1,26 @@
+defineTest(LOG){
+    MSG = $$1
+    message($$pro_file(): $$MSG)
+    return (true)
+}
+
+defineTest(WARNING){
+	MSG = $$1
+	warning($$pro_file(): $$MSG)
+	return (true)
+}
+#общие библиотеки
+defineReplace(pro_file){
+    LIST = $$split(_PRO_FILE_, /)
+    return ( $$last(LIST))
+}
+
+defineReplace(module_name){
+    FILE = $$pro_file()
+    return ($$replace(FILE, .pro, ))
+}
+
+defineReplace(module_include_path){
+	PATH = $$1
+	return ($$absolute_path($${DEPENDS_BASE_PATH}/$${PATH}))
+}

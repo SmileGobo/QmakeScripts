@@ -33,10 +33,10 @@ defineTest(ConsoleApplication){
     }
     export(INCLUDEPATH)
 
-    exists($$BUILD_PATH/lib){
-        LIBS += -L$${BUILD_PATH}/lib
-    }
-    export(LIBS)
+   # exists($$BUILD_PATH/lib){
+   #     LIBS += -L$${BUILD_PATH}/lib
+   # }
+   # export(LIBS)
     return (true)
 }
 
