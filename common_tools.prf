@@ -7,7 +7,7 @@ load(common/util_tools)
 #пока используется include(settings.pri)
 defineTest(Init){
     isEmpty(OUT_DIR){
-        OUT_DIR=$$absolute_path($${_PRO_FILE_PWD_}/../build)
+        OUT_DIR=$$absolute_path($${_PRO_FILE_PWD_}/../build/$${_TARGET})
         warning($$module_name(): default OUT_DIR: $$OUT_DIR)
     }else{
         OUT_DIR= $$absolute_path($$OUT_DIR)
@@ -40,10 +40,20 @@ defineTest(Init){
     }
 
     #если есть пользовательские настройки подключаем
-    USER_SETTINGS = $${BASE_PATH}/../user_settings.pri
-    exists($$USER_SETTINGS){
+    #USER_SETTINGS = ./../user_settings.pri
+    LOG($$USER_SETTINGS)
+    #exists($$USER_SETTINGS){
         include($$USER_SETTINGS)
-    }
+        !isEmpty(EXTERNAL_LIB_PATH){
+            export(EXTERNAL_LIB_PATH)
+        }
+        !isEmpty(EXTERNAL_INC_PATH){
+            export(EXTERNAL_INC_PATH)
+        }
+    #}
+    #else{
+    #    LOG(NOT FOUND USER SETTINGS)
+    #}
     export(CONFIG)
     export(OUT_DIR)
     export(DEFINES)

@@ -21,7 +21,7 @@ defineTest(SetHeadersPath){
 defineTest(SetLibraryPath){
     PATHS = $$1 #список путей
     isEmpty(PATHS){
-        warning(SetLibraryPaths: empty 1 arg)
+        WARNING(SetLibraryPaths: empty 1 arg)
         return (false)
     }
     for(p, PATHS){
