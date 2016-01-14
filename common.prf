@@ -1,24 +1,25 @@
-load(common/project_tools)
-load(common/depend_tools)
-load(common/util_tools)
+load(tools/project)
+load(tools/depend)
+load(tools/util)
 
 
 #инициализация вызвать в начале проекта
 #пока используется include(settings.pri)
 defineTest(Init){
+    OUT_DIR = $$1
     isEmpty(OUT_DIR){
-        OUT_DIR=$$absolute_path($${_PRO_FILE_PWD_}/../build/$${_TARGET})
+        LOG(PWD $$PWD)
+        OUT_DIR=$$absolute_path($${_PRO_FILE_PWD_}/../build)
         warning($$module_name(): default OUT_DIR: $$OUT_DIR)
-    }else{
-        OUT_DIR= $$absolute_path($$OUT_DIR)
     }
 
+    
     CONFIG += no_include_pwd
     CONFIG += C++11
 
     CONFIG(debug, debug|release) {
         BUILD_TYPE=debug
-        DEFINES+= _DEBUG        # в коде тоже должны знать что у нас отладка
+        DEFINES+= _DEBUG            #в коде тоже должны знать что у нас отладка
         LIB_SUFFIX=d
     } else {
         LIB_SUFFIX=                 #суффикс для библиотек d - для дебаг и пустой для release
@@ -30,6 +31,7 @@ defineTest(Init){
     BUILD_PATH=$${OUT_DIR}/$$_TARGET
     #дирректория для складирования модулей подсистем
     LIB_DIR=$$BUILD_PATH/lib 
+
     #дирректория для разделеной линковки подсистем и тестов и приложений
     OBJ_DIR=$$BUILD_PATH/obj/$$BUILD_TYPE/$$module_name() 
     #дира для исполняемых файлов 
@@ -41,7 +43,7 @@ defineTest(Init){
 
     #если есть пользовательские настройки подключаем
     #USER_SETTINGS = ./../user_settings.pri
-    LOG($$USER_SETTINGS)
+    #LOG($$USER_SETTINGS)
     #exists($$USER_SETTINGS){
         include($$USER_SETTINGS)
         !isEmpty(EXTERNAL_LIB_PATH){
@@ -71,6 +73,9 @@ defineTest(Init){
 # параметр 1 - путь
 defineTest(SetInstall){
     PATH = $$1
+    isEmpty(PATH){
+        return(false)
+    }
     #library
     target.path = $$PATH
     target.files = $$TARGET
