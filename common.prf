@@ -72,16 +72,16 @@ defineTest(Init){
 #Цель make install 
 # параметр 1 - путь
 defineTest(SetInstall){
-    PATH = $$1
-    isEmpty(PATH){
-        return(false)
+    #Загрузка на плату если установлена глобальная переменная DEVICE_DEPLOY_DIR
+    !isEmpty(DEVICE_DEPLOY_DIR){
+        LOG(Make INSTALL)
+        target.files = $$TARGET
+        target.path = $$DEVICE_DEPLOY_DIR
+        export(target.files)
+        export(target.path)
+        INSTALLS += target
+        export(INSTALLS)
     }
-    #library
-    target.path = $$PATH
-    target.files = $$TARGET
-
-    INSTALLS += headers
-    export(INSTALLS)
     return (true)
 }
 
