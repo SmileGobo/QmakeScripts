@@ -1,2 +1,3 @@
 # QMakeScipts
-Установка кладем tool tool дирректорию mkspec/features
+Установка:
+кладем tool в дирректорию mkspec/features
