@@ -1,0 +1,115 @@
+load(tools/project)
+load(tools/depend)
+load(tools/util)
+
+
+#инициализация вызвать в начале проекта
+#пока используется include(settings.pri)
+defineTest(Init){
+    OUT_DIR = $$1
+    isEmpty(OUT_DIR){
+        LOG(PWD $$PWD)
+        OUT_DIR=$$absolute_path($${_PRO_FILE_PWD_}/../build)
+        warning($$module_name(): default OUT_DIR: $$OUT_DIR)
+    }
+
+    
+    CONFIG += no_include_pwd
+    CONFIG += C++11
+
+    CONFIG(debug, debug|release) {
+        BUILD_TYPE=debug
+        DEFINES+= _DEBUG            #в коде тоже должны знать что у нас отладка
+        LIB_SUFFIX=d
+    } else {
+        LIB_SUFFIX=                 #суффикс для библиотек d - для дебаг и пустой для release
+        BUILD_TYPE=release          #тип сборки отладочная или релизная
+    }
+    #настройки проекта глобальные
+    #базовая дирректория может быть переопределена в user_settings
+
+    BUILD_PATH=$${OUT_DIR}/$$_TARGET
+    #дирректория для складирования модулей подсистем
+    LIB_DIR=$$BUILD_PATH/lib 
+
+    #дирректория для разделеной линковки подсистем и тестов и приложений
+    OBJ_DIR=$$BUILD_PATH/obj/$$BUILD_TYPE/$$module_name() 
+    #дира для исполняемых файлов 
+    BIN_DIR=$$BUILD_PATH/bin               
+    win32{
+        DEFINES+=WIN32_
+        QMAKE_CXXFLAGS += /wd4482  #отключает некорректный варининг в 10 студии
+    }
+
+    #если есть пользовательские настройки подключаем
+    #USER_SETTINGS = ./../user_settings.pri
+    #LOG($$USER_SETTINGS)
+    #exists($$USER_SETTINGS){
+        include($$USER_SETTINGS)
+        !isEmpty(EXTERNAL_LIB_PATH){
+            export(EXTERNAL_LIB_PATH)
+        }
+        !isEmpty(EXTERNAL_INC_PATH){
+            export(EXTERNAL_INC_PATH)
+        }
+    #}
+    #else{
+    #    LOG(NOT FOUND USER SETTINGS)
+    #}
+    export(CONFIG)
+    export(OUT_DIR)
+    export(DEFINES)
+    export(QMAKE_CXXFLAGS)
+    export(BUILD_TYPE)
+    export(LIB_SUFFIX)
+    export(BIN_DIR)
+    export(OBJ_DIR)
+    export(LIB_DIR)
+
+    return (true)
+}
+
+#Цель make install 
+# параметр 1 - путь
+defineTest(SetInstall){
+    #Загрузка на плату если установлена глобальная переменная DEVICE_DEPLOY_DIR
+    !isEmpty(DEVICE_DEPLOY_DIR){
+        target.files = $$TARGET
+        target.path = $$DEVICE_DEPLOY_DIR
+        export(target.files)
+        export(target.path)
+        INSTALLS += target
+        export(INSTALLS)
+    }
+    return (true)
+}
+
+
+#Копирование заголовочных файлов
+#Копирует в билд диру в include/<имя_модуля> все хидеры модуля
+defineTest(CopyHeaders){
+    
+    INC_PATH = $$BUILD_PATH/include/$$MODULE_NAME
+    !exists($$INC_PATH){
+        system($$QMAKE_MKDIR $$INC_PATH)
+    }
+
+    CLEAN_COMMAND = $$QMAKE_DEL_FILE $$INC_PATH/*
+    system($$CLEAN_COMMAND)
+
+    COPY_COMMAND = $$QMAKE_COPY ./include/* $$INC_PATH -r
+    system($$COPY_COMMAND)
+
+    #QMAKE_EXTRA_TARGETS += mytarget
+    #export(QMAKE_EXTRA_TARGETS)
+    return (true)
+}
+defineTest(LoadDepends){
+    DEPENDS_FILE = $$1
+
+    DEPENDS_BASE_PATH=$$2
+    isEmpty(DEPENDS_BASE_PATH){
+        DEPENDS_BASE_PATH=.
+    }
+    include($$DEPENDS_FILE)
+}
