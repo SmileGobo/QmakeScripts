@@ -99,7 +99,6 @@ defineTest(Module){
     SUBDIRS += Module
 
     !isEmpty(TEST_NAME){
-    LOG(TEST ADD $$TEST_NAME)
         contains(TEST_ENABLE, $$TEST_NAME){
             SUBDIRS += Test
         }
