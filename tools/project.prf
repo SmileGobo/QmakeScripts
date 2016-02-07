@@ -85,6 +85,29 @@ defineTest(StaticLibrary){
     return (true)
 }
 
+#Обявляет проект модуля с тестом, если передать имя теста
+#$1 - Имя теста, если пусто не сгенерирует добавление проекта теста
+defineTest(Module){
+    TEST_NAME=$1
+    TEMPLATE = subdirs
+
+    CONFIG -= app_bundle
+    CONFIG -= qt
+    CONFIG += ordered
+
+
+    SUBDIRS += Module
+
+    !isEmpty(TEST_NAME){
+        contains(TEST_ENABLE, $$TEST_NAME){
+            SUBDIRS += Test
+        }
+    }
+
+    export(TEMPLATE)
+    export(CONFIG)
+    export(SUBDIRS)
+}
 defineTest(Subdirs){
     TEMPLATE = subdirs
 
