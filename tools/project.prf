@@ -88,7 +88,7 @@ defineTest(StaticLibrary){
 #Обявляет проект модуля с тестом, если передать имя теста
 #$1 - Имя теста, если пусто не сгенерирует добавление проекта теста
 defineTest(Module){
-    TEST_NAME=$1
+    TEST_NAME=$$1
     TEMPLATE = subdirs
 
     CONFIG -= app_bundle
@@ -99,6 +99,7 @@ defineTest(Module){
     SUBDIRS += Module
 
     !isEmpty(TEST_NAME){
+    LOG(TEST ADD $$TEST_NAME)
         contains(TEST_ENABLE, $$TEST_NAME){
             SUBDIRS += Test
         }
