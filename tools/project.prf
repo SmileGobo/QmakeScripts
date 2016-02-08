@@ -100,7 +100,7 @@ defineTest(Module){
 
     !isEmpty(TEST_NAME){
         contains(TEST_ENABLE, $$TEST_NAME){
-            SUBDIRS += Test
+            SUBDIRS += $$TEST_NAME
         }
     }
 
