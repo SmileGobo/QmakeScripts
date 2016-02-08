@@ -1,12 +1,12 @@
 defineTest(LOG){
     MSG = $$1
-    message($$pro_file(): $$MSG)
+    message($$PWD/$$pro_file():$$MSG)
     return (true)
 }
 
 defineTest(WARNING){
 	MSG = $$1
-	warning($$pro_file(): $$MSG)
+	warning($$PWD/$$pro_file():$$MSG)
 	return (true)
 }
 #общие библиотеки
@@ -23,4 +23,18 @@ defineReplace(module_name){
 defineReplace(module_include_path){
 	PATH = $$1
 	return ($$absolute_path($${DEPENDS_BASE_PATH}/$${PATH}))
+}
+#Функция извлекает значения хеша по ключу
+#TODO название так себе
+# PATH.firstModule = /path/to/first/module
+# PATH.secondModule = /path/to/second/module
+# for(m, MODULES){
+#  INCLUDEPATH += $$MapValue(PATH, $$m)/include    
+# }
+defineReplace(MapValue){
+    MAP = $$1
+    KEY = $$2
+    var = "$${MAP}.$${KEY}"
+    eval(result = \$\$$${var})
+    return ($$result)
 }
