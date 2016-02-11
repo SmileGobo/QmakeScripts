@@ -32,20 +32,6 @@ defineTest(ConsoleApplication){
         INCLUDEPATH += $$EXTERNAL_INC_PATH
     }
     export(INCLUDEPATH)
-
-   # exists($$BUILD_PATH/lib){
-   #     LIBS += -L$${BUILD_PATH}/lib
-   # }
-   # export(LIBS)
-    #Загрузка на плату если установлена глобальная переменная DEVICE_DEPLOY_DIR
-    #!isEmpty(DEVICE_DEPLOY_DIR){
-    #    LOG(Make INSTALL)
-    #    t.files = $$TARGET
-    #    t.path = $$DEVICE_DEPLOY_DIR
-    #    LOG($$t.path)
-    #    INSTALLS += t
-    #    export(INSTALLS)
-    #}
     return (true)
 }
 defineTest(StaticLibrary){

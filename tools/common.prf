@@ -33,7 +33,7 @@ defineTest(Init){
     LIB_DIR=$$BUILD_PATH/lib 
 
     #дирректория для разделеной линковки подсистем и тестов и приложений
-    OBJ_DIR=$$BUILD_PATH/obj/$$BUILD_TYPE/$$module_name() 
+    OBJ_DIR=$$BUILD_PATH/obj/$$module_name() 
     #дира для исполняемых файлов 
     BIN_DIR=$$BUILD_PATH/bin               
     win32{
@@ -41,21 +41,14 @@ defineTest(Init){
         QMAKE_CXXFLAGS += /wd4482  #отключает некорректный варининг в 10 студии
     }
 
-    #если есть пользовательские настройки подключаем
-    #USER_SETTINGS = ./../user_settings.pri
-    #LOG($$USER_SETTINGS)
-    #exists($$USER_SETTINGS){
-        include($$USER_SETTINGS)
-        !isEmpty(EXTERNAL_LIB_PATH){
-            export(EXTERNAL_LIB_PATH)
-        }
-        !isEmpty(EXTERNAL_INC_PATH){
-            export(EXTERNAL_INC_PATH)
-        }
-    #}
-    #else{
-    #    LOG(NOT FOUND USER SETTINGS)
-    #}
+    include($$USER_SETTINGS)
+    !isEmpty(EXTERNAL_LIB_PATH){
+        export(EXTERNAL_LIB_PATH)
+    }
+    !isEmpty(EXTERNAL_INC_PATH){
+        export(EXTERNAL_INC_PATH)
+    }
+
     export(CONFIG)
     export(OUT_DIR)
     export(DEFINES)
@@ -83,7 +76,12 @@ defineTest(SetInstall){
     }
     return (true)
 }
-
+#Установка заголовочников в прокет
+#!!!Требование: должны include
+defineTest(Headers){
+    HEADERS += include/$$module_name()/*.h
+    return (true)
+}
 
 #Копирование заголовочных файлов
 #Копирует в билд диру в include/<имя_модуля> все хидеры модуля
