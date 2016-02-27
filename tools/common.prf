@@ -64,22 +64,17 @@ defineTest(Init){
 
 #Цель make install 
 # параметр 1 - путь
-defineTest(SetInstall){
+defineTest(SetDeploy){
     #Загрузка на плату если установлена глобальная переменная DEVICE_DEPLOY_DIR
     !isEmpty(DEVICE_DEPLOY_DIR){
         target.files = $$TARGET
         target.path = $$DEVICE_DEPLOY_DIR
         export(target.files)
         export(target.path)
+        export($$target)
         INSTALLS += target
         export(INSTALLS)
     }
-    return (true)
-}
-#Установка заголовочников в прокет
-#!!!Требование: должны include
-defineTest(Headers){
-    HEADERS += include/$$module_name()/*.h
     return (true)
 }
 
@@ -102,12 +97,38 @@ defineTest(CopyHeaders){
     #export(QMAKE_EXTRA_TARGETS)
     return (true)
 }
-defineTest(LoadDepends){
-    DEPENDS_FILE = $$1
 
-    DEPENDS_BASE_PATH=$$2
-    isEmpty(DEPENDS_BASE_PATH){
-        DEPENDS_BASE_PATH=.
+
+#установка билиотеки в SDK
+#$$1 - PREFIX базовый путь
+#установка произойдет в
+#<SDK_PATH>/<TARGET>/lib/ - библиотеки
+#<SDK_PATH>/<TARGET>/include/ - заголовочные файлы
+#TARGET платформа объявленная в MKSPEC в переменной $$_TARGET
+defineTest(InstallSDK){
+    SDK_PATH = $$1/$$_TARGET
+    isEmpty(SDK_PATH){
+        return (false)
     }
-    include($$DEPENDS_FILE)
+    lib.path = $$SDK_PATH/lib
+    lib.files += $$LIB_DIR/*.a
+    lib.files += $$LIB_DIR/*.lib
+    lib.files += $$LIB_DIR/*.so
+    lib.files += $$LIB_DIR/*.dll
+    export(lib.path)
+    export(lib.files)
+    export($$lib)
+    INSTALLS += lib
+
+    headers.path = $$SDK_PATH/include
+    headers.files = ./include/*
+
+    export(headers.path)
+    export(headers.files)
+    export($$headers)
+    INSTALLS += headers
+
+    export(INSTALLS)
+
+    return (true)
 }

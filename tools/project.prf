@@ -19,6 +19,9 @@ defineTest(ConsoleApplication){
     DESTDIR = $$BIN_DIR
     export(DESTDIR)
     OBJECTS_DIR = $$OBJ_DIR/$${TARGET}/$$BUILD_TYPE
+    !exists($$OBJECT_DIR/){
+        mkpath($$OBJECT_DIR)
+    }
     export(OBJECTS_DIR)
 
     QMAKE_CLEAN+= -r $${DESTDIR}/$${TARGET}
@@ -50,6 +53,9 @@ defineTest(StaticLibrary){
     export(DESTDIR)
 
     OBJECTS_DIR = $$OBJ_DIR/$${MODULE_NAME}/$${BUILD_TYPE}
+    !exists($$OBJECT_DIR/){
+        mkpath($$OBJECT_DIR)
+    }
     export(OBJECTS_DIR)
 
     TARGET=$${MODULE_NAME}$${LIB_SUFFIX}
