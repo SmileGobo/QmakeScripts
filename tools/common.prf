@@ -64,9 +64,11 @@ defineTest(Init){
 
 #Цель make install 
 # параметр 1 - путь
+# если пуст не пропишет загрузку в устройство
 defineTest(SetDeploy){
+    DEPLOY_DIR = $$1
     #Загрузка на плату если установлена глобальная переменная DEVICE_DEPLOY_DIR
-    !isEmpty(DEVICE_DEPLOY_DIR){
+    !isEmpty(DEPLOY_DIR){
         target.files = $$TARGET
         target.path = $$DEVICE_DEPLOY_DIR
         export(target.files)
