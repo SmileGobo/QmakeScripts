@@ -106,10 +106,12 @@ defineTest(CopyHeaders){
 #<SDK_PATH>/<TARGET>/include/ - заголовочные файлы
 #TARGET платформа объявленная в MKSPEC в переменной $$_TARGET
 defineTest(InstallSDK){
-    SDK_PATH = $$1/$$_TARGET
-    isEmpty(SDK_PATH){
+    PREFIX= $$1
+    
+    isEmpty(PREFIX){
         return (false)
     }
+    SDK_PATH = $$PREFIX/$$_TARGET
     lib.path = $$SDK_PATH/lib
     lib.files += $$LIB_DIR/*.a
     lib.files += $$LIB_DIR/*.lib
