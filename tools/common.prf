@@ -114,22 +114,18 @@ defineTest(InstallSDK){
         return (false)
     }
     SDK_PATH = $$PREFIX/$$_TARGET
-    lib.path = $$SDK_PATH/lib
-    lib.files += $$LIB_DIR/*.a
-    lib.files += $$LIB_DIR/*.lib
-    lib.files += $$LIB_DIR/*.so
-    lib.files += $$LIB_DIR/*.dll
-    export(lib.path)
-    export(lib.files)
-    export($$lib)
-    INSTALLS += lib
+    
+    target.path = $$SDK_PATH/lib
+    export(target.path)
+
+    INSTALLS += target
 
     headers.path = $$SDK_PATH/include
-    headers.files = ./include/*
-
     export(headers.path)
+
+    headers.files = ./include/*    
     export(headers.files)
-    export($$headers)
+
     INSTALLS += headers
 
     export(INSTALLS)
