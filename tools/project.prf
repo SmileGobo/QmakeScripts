@@ -2,7 +2,7 @@ defineTest(ConsoleApplication){
     TEMPLATE = app
     export(TEMPLATE)
 
-    QT       -= core gui qt
+    QT -= core gui qt
     export(QT)
 
     CONFIG += console

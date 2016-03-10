@@ -35,7 +35,7 @@ defineTest(SetLibraryPath){
 
 
 #Подключение либ
-defineTest(ExportModules){
+defineTest(ImportModules){
 # example:
 #    PMODULES = Foundation Util Net XML JSON
 #    ExportModules($$PMODULES, Poco)
@@ -50,6 +50,20 @@ defineTest(ExportModules){
     export(LIBS)
     return (true)
 }
+#функция экспорта дополнительныйх путей
+#BOOST_PATH POCO_PATH(устаревшие не использовать)
+defineTest(ImportPaths){
+    !isEmpty(BOOST_PATH){
+        SetHeadersPath($$BOOST_PATH/include)
+        SetLibraryPath($$BOOST_PATH/lib)
+    }
+
+    !isEmpty(POCO_PATH){
+        SetHeadersPath($$POCO_PATH/include)
+        SetLibraryPath($$POCO_PATH/lib)
+    }
+}
+
 
 #включение флага для экспорта библиотек библиотек 
 #example:
@@ -100,7 +114,6 @@ defineTest(GetDepends){
 #управление группами библиотек
 #VALUE (start|stop)
 defineTest(Group){
-
     !isEmpty(1){
         LIBS += $$sprintf("-Wl,--%1-group", $$1)
         export(LIBS)
@@ -110,6 +123,7 @@ defineTest(Group){
         return (false)
     }
 }
+
 #Загрузка зависимостей прокатит только для внутренних модулей проекта
 #не работает этот механизм
 defineTest(LoadDepends){
