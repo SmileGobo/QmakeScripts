@@ -112,7 +112,7 @@ defineTest(GetDepends){
     return(false)
 }
 #управление группами библиотек
-#VALUE (start|stop)
+#VALUE (start|end)
 defineTest(Group){
     !isEmpty(1){
         LIBS += $$sprintf("-Wl,--%1-group", $$1)

@@ -107,7 +107,11 @@ defineTest(CopyHeaders){
 #<SDK_PATH>/<TARGET>/include/ - заголовочные файлы
 #TARGET платформа объявленная в MKSPEC в переменной $$_TARGET
 defineTest(InstallSDK){
-    PREFIX= $$1
+
+    !CONFIG(staticlib){
+        return(false)
+    }
+    PREFIX = $$1
     
     isEmpty(PREFIX){
         return (false)
