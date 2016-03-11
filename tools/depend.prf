@@ -137,12 +137,14 @@ defineTest(LoadDepends){
 }
 
 #добавление заголовочников локальных модулей проекта
-#$$1 - список модулей (имена дирректорий от корня проекта)
+#$$1 - корень проекта
+#$$2 - список модулей (имена дирректорий от корня проекта)
 defineTest(ImportLocalHeaders){
-    MODS = $$1
+    MODS = $$2
+    ROOT = $$1
 
     for(m, MODS){
-        INC_PATH= $$clean_path($$BUILD_PATH/../$$m/Module/include)
+        INC_PATH= $$clean_path($$ROOT/$$m/Module/include)
         SetHeadersPath($$INC_PATH)
     }
     return (true)
