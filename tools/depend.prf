@@ -106,11 +106,6 @@ defineTest(EnableDebugSuffix){
     return(true)
 }
 
-#поиск и подключение файлов зависимостей
-#TODO допилить
-defineTest(GetDepends){
-    return(false)
-}
 #управление группами библиотек
 #VALUE (start|end)
 defineTest(Group){
@@ -124,17 +119,6 @@ defineTest(Group){
     }
 }
 
-#Загрузка зависимостей прокатит только для внутренних модулей проекта
-#не работает этот механизм
-defineTest(LoadDepends){
-    DEPENDS_FILE = $$1
-
-    DEPENDS_BASE_PATH=$$2
-    isEmpty(DEPENDS_BASE_PATH){
-        DEPENDS_BASE_PATH=.
-    }
-    include($$DEPENDS_FILE)
-}
 
 #добавление заголовочников локальных модулей проекта
 #$$1 - корень проекта
