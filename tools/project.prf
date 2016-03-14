@@ -66,9 +66,8 @@ defineTest(StaticLibrary){
     }
 
     export(QMAKE_CLEAN)
-
-    INCLUDEPATH += ./include
-    export(INCLUDEPATH)
+    
+    SetHeadersPath(./include)
 
     return (true)
 }
