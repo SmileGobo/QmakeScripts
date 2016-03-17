@@ -29,8 +29,8 @@ win32{
 }
 
 #если есть пользовательские настройки подключаем
-exists(../user_settings.pri){
-    include(../user_settings.pri)
-}
+#exists(../user_settings.pri){
+#    include(../user_settings.pri)
+#}
 
 

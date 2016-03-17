@@ -39,14 +39,8 @@ defineTest(Init){
         QMAKE_CXXFLAGS += /wd4482  #отключает некорректный варининг в 10 студии
     }
 
-    include($$USER_SETTINGS)
-    !isEmpty(EXTERNAL_LIB_PATH){
-        export(EXTERNAL_LIB_PATH)
-    }
-    !isEmpty(EXTERNAL_INC_PATH){
-        export(EXTERNAL_INC_PATH)
-    }
-
+    #include($$USER_SETTINGS)
+   
     export(CONFIG)
     export(OUT_DIR)
     export(DEFINES)
@@ -128,11 +122,12 @@ defineTest(ImportSDK){
     isEmpty(PATH){
         return(false)
     }
-
-    SetHeadersPath($$clean_path($$PATH/$$_TARGET/include))
-    
-    contains(TEMPLATE, app){
-        SetLibraryPath($$clean_path($$PATH/$$_TARGET/lib))
+    for(p, PATH){
+        SetHeadersPath($$clean_path($$p/$$_TARGET/include))
+        LOG($$p)
+        contains(TEMPLATE, app){
+            SetLibraryPath($$clean_path($$p/$$_TARGET/lib))
+        }
     }
     return (true)
 }
