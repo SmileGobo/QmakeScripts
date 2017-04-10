@@ -55,7 +55,8 @@ defineTest(Init){
 }
 
 #Цель make install для исполняемых файлов
-# параметр 1 - путь
+# $$1 - DEPLOY_DIR путь установки
+# $$2 - BIN_DIR (каталог вложенный по умолчанию bin)
 # если пуст не пропишет загрузку в устройство
 # если статическая либа тоже не пропишет
 defineTest(SetDeploy){
@@ -63,9 +64,15 @@ defineTest(SetDeploy){
     isEmpty(DEPLOY_DIR): return (false)
 
     DEPLOY_DIR = $$1
+    BIN_DIR =  $$2
+    isEmpty(BIN_DIR){
+        BIN_DIR=bin
+    }
+    
     #Загрузка на плату если не пустая переменная
     #target.files = $$TARGET
-    target.path = $$DEPLOY_DIR
+    target.path = $$DEPLOY_DIR/$$BIN_DIR
+    LOG($$target.path)
     export(target.files)
     export(target.path)
     export($$target)
@@ -124,7 +131,6 @@ defineTest(ImportSDK){
     }
     for(p, PATH){
         SetHeadersPath($$clean_path($$p/$$_TARGET/include))
-        LOG($$p)
         contains(TEMPLATE, app){
             SetLibraryPath($$clean_path($$p/$$_TARGET/lib))
         }
