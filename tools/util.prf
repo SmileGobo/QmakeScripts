@@ -38,3 +38,14 @@ defineReplace(MapValue){
     eval(result = \$\$$${var})
     return ($$result)
 }
+#Функция вычисляет правильное имя библиотеки для статической либы
+# В зависмимости от платформы
+defineReplace(StaticName){
+    NAME = $$1
+    unix:PREFIX=lib
+    CONFIG(debug, debug|release):SUFFIX+=d
+    unix:SUFFIX += $${SUFFIX}.a
+    win32:SUFFIX += $${SUFFIX}.lib
+
+    return ($${PREFIX}$${NAME}$${SUFFIX})
+}

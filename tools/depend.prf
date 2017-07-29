@@ -38,7 +38,7 @@ defineTest(SetLibraryPath){
 defineTest(ImportModules){
 # example:
 #    PMODULES = Foundation Util Net XML JSON
-#    ExportModules($$PMODULES, Poco)
+#    ImportModules($$PMODULES, Poco)
 #
     MODULES = $$1
     PREFIX = $$2
@@ -132,4 +132,14 @@ defineTest(ImportLocalHeaders){
         SetHeadersPath($$INC_PATH)
     }
     return (true)
+}
+
+#Фиксация зависимостей от статических библиотек внутри проекта
+#При вызове этой функции начнут отслеживаться измения в смежных модулях и при
+#сборке будет перелинковыватся исполняемый файл
+#$$1 - список модулей(статических либ) проекта
+defineTest(SetLocalDepends){
+    for(module, 1){
+        PRE_TARGETDEPS += $$LIB_DIR/$$StaticName($$module)
+    }
 }
