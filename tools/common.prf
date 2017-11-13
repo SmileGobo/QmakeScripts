@@ -61,10 +61,13 @@ defineTest(Init){
 # если статическая либа тоже не пропишет
 defineTest(SetDeploy){
     CONFIG(staticlib): return(false)
-    isEmpty(DEPLOY_DIR): return (false)
+    
 
     DEPLOY_DIR = $$1
     BIN_DIR =  $$2
+
+    isEmpty(DEPLOY_DIR): return (false)
+    
     isEmpty(BIN_DIR){
         BIN_DIR=bin
     }
