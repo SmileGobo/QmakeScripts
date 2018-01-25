@@ -1,3 +1,6 @@
+
+## @brief Консольное приложение без qt
+## @param имя исполняемого файла
 defineTest(ConsoleApplication){
     TEMPLATE = app
     export(TEMPLATE)
@@ -33,6 +36,10 @@ defineTest(ConsoleApplication){
 
     return (true)
 }
+
+## @brief Статичсекая библиотека
+## @param имя библиотеки
+##
 defineTest(StaticLibrary){
     MODULE_NAME = $$1
     export(MODULE_NAME) #грязный чит
@@ -72,18 +79,19 @@ defineTest(StaticLibrary){
     return (true)
 }
 
-#Обявляет проект модуля с тестом, если передать имя теста
-#$1 - Имя теста, если пусто не сгенерирует добавление проекта теста
+## @brief Объявляет проект модуля с тестом, если передать имя теста
+## @param - Имя теста, если пусто не сгенерирует добавление проекта теста
 defineTest(Module){
     TEST_NAME=$$1
     TEMPLATE = subdirs
 
     CONFIG -= app_bundle
     CONFIG -= qt
-    CONFIG += ordered
+    #CONFIG += ordered
 
 
     SUBDIRS += Module
+    $${TEST_NAME}.depends = Module
 
     !isEmpty(TEST_NAME){
         contains(TEST_ENABLE, $$TEST_NAME){
@@ -94,7 +102,12 @@ defineTest(Module){
     export(TEMPLATE)
     export(CONFIG)
     export(SUBDIRS)
+    export(Module)
+    export($$TEST_NAME)
+    export($${TEST_NAME}.depends)
 }
+
+
 defineTest(Subdirs){
     TEMPLATE = subdirs
 

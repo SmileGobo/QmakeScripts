@@ -73,15 +73,13 @@ defineTest(SetDeploy){
     }
     
     #Загрузка на плату если не пустая переменная
-    #target.files = $$TARGET
     target.path = $$DEPLOY_DIR/$$BIN_DIR
-    LOG($$target.path)
     export(target.files)
     export(target.path)
     export($$target)
     INSTALLS += target
     export(INSTALLS)
-
+    
     return(true)
 }
 
@@ -121,12 +119,12 @@ defineTest(InstallSDK){
     return (true)
 }
 
-#Добавление путей библиотек и заголовочников
-# Вызвывать после объявление типа прокета ConsoleApplication|StaticLibrary
-#$$1 - PATH базовый путь к дирректории где должна быть соблюдена следующая структура
-# [_TARGET] - если не объявлен то уровень вложенности меньше
-#   include
-#   lib
+## @brief Добавление путей библиотек и заголовочников
+## Вызвывать после объявление типа прокета ConsoleApplication|StaticLibrary
+## @param базовый путь к дирректории где должна быть соблюдена следующая структура
+## [_TARGET] - если не объявлен то уровень вложенности меньше
+##   include
+##   lib
 defineTest(ImportSDK){
     PATH=$$1
     isEmpty(PATH){

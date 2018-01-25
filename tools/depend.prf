@@ -1,8 +1,10 @@
-#Функции для подключения заивисмостей
+## @module Depend
+## @brief функции для подключения заивисмостей#
 
-#Установка путей заголовочных файлов
+## @brief Установка путей заголовочных файлов
+## @param 1 - Cписок путей
 defineTest(SetHeadersPath){
-    PATHS = $$1 #Cписок путей
+    PATHS = $$1 
     isEmpty(PATHS){
         WARNING(SetHeadersPath: empty 1 arg)
         return (false)
@@ -17,9 +19,11 @@ defineTest(SetHeadersPath){
     return(true)
 }
 
-#Установка путей библиотек
+## @brief Установка путей библиотек
+## @param 1 - список путей
+
 defineTest(SetLibraryPath){
-    PATHS = $$1 #список путей
+    PATHS = $$1 
     isEmpty(PATHS){
         WARNING(SetLibraryPaths: empty 1 arg)
         return (false)
@@ -34,12 +38,17 @@ defineTest(SetLibraryPath){
 }
 
 
-#Подключение либ
+## @brief Подключение либ
+## @param 1 - список модулей
+## @param 2 - суффикс модуля 
+## @example
+##    PMODULES = Foundation Util Net XML JSON
+##    ImportModules($$PMODULES, Poco) #суффикс Poco
+##    BOOST_MODULES = system asio
+##    ImportModules($$BOOST_MODULES, boost_)
+##
 defineTest(ImportModules){
-# example:
-#    PMODULES = Foundation Util Net XML JSON
-#    ImportModules($$PMODULES, Poco)
-#
+
     MODULES = $$1
     PREFIX = $$2
     SUFFIX = $${3}$${LIB_SUFFIX}
@@ -50,27 +59,15 @@ defineTest(ImportModules){
     export(LIBS)
     return (true)
 }
-#функция экспорта дополнительныйх путей
-#BOOST_PATH POCO_PATH(устаревшие не использовать)
-defineTest(ImportPaths){
-    !isEmpty(BOOST_PATH){
-        SetHeadersPath($$BOOST_PATH/include)
-        SetLibraryPath($$BOOST_PATH/lib)
-    }
-
-    !isEmpty(POCO_PATH){
-        SetHeadersPath($$POCO_PATH/include)
-        SetLibraryPath($$POCO_PATH/lib)
-    }
-}
 
 
-#включение флага для экспорта библиотек библиотек 
-#example:
-#LIBRARY_EXPORT{
-#    ... #подключаем модули, нужно для бинарников
-#}
-#
+
+## @brief включение флага для экспорта библиотек библиотек 
+## @example
+## LIBRARY_EXPORT{
+##    ... #подключаем модули, нужно для бинарников
+## }
+##
 defineTest(EnableModuleExport){
     CONFIG += LIBRARY_EXPORT
     export(CONFIG)
@@ -89,14 +86,13 @@ defineTest(DisableDebugSuffix){
     return (true)
 }
 
-#Включение суффикса d для библиотек в режиме сборки Debug
-#Если сборка Release, проигнорируется
+## @brief Включение суффикса d для библиотек в режиме сборки Debug
+## Если сборка Release, проигнорируется
 defineTest(EnableDebugSuffix){
     #планы на будущее
     #PREFIX = $$1
     #POSTFIX = $$2
     CONFIG(debug, debug|release) {
-        #LIB_SIFFIX = $${PREFIX}d$${POSTFIX}
         LIB_SUFFIX=d
     } else {
         LIB_SUFFIX=                 #суффикс для библиотек d - для дебаг и пустой для release
@@ -106,8 +102,8 @@ defineTest(EnableDebugSuffix){
     return(true)
 }
 
-#управление группами библиотек
-#VALUE (start|end)
+## @brief управление группами библиотек
+## @param начало конец группы (start|end)
 defineTest(Group){
     !isEmpty(1){
         LIBS += $$sprintf("-Wl,--%1-group", $$1)
@@ -120,9 +116,9 @@ defineTest(Group){
 }
 
 
-#добавление путей к заголовочным файлам локальных модулей проекта
-#$$1 - корень проекта
-#$$2 - список модулей (имена дирректорий от корня проекта)
+## @brief добавление путей к заголовочным файлам локальных модулей проекта
+## @param корень проекта
+## @param список модулей (имена дирректорий от корня проекта)
 defineTest(ImportLocalHeaders){
     MODS = $$2
     ROOT = $$1
@@ -134,12 +130,18 @@ defineTest(ImportLocalHeaders){
     return (true)
 }
 
-#Фиксация зависимостей от статических библиотек внутри проекта
-#При вызове этой функции начнут отслеживаться измения в смежных модулях и при
-#сборке будет перелинковыватся исполняемый файл
-#$$1 - список модулей(статических либ) проекта
+## @brief Фиксация зависимостей от статических библиотек внутри проекта
+## При вызове этой функции начнут отслеживаться измения в смежных модулях и при
+## сборке будет перелинковыватся исполняемый файл
+## @param - список модулей(статических либ) проекта
+## @param - префикс как ImportModules
 defineTest(SetLocalDepends){
-    for(module, 1){
-        PRE_TARGETDEPS += $$LIB_DIR/$$StaticName($$module)
+    PREFIX = $$2
+    LIST = $$1
+    for(module, LIST){
+        lib_name = $${PREFIX}$${module}
+        rslt = $$LIB_DIR/$$StaticName($$lib_name)
+        PRE_TARGETDEPS += $$rslt
     }
+    export (PRE_TARGETDEPS)
 }
