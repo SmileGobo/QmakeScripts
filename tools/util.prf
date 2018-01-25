@@ -24,13 +24,15 @@ defineReplace(module_include_path){
 	PATH = $$1
 	return ($$absolute_path($${DEPENDS_BASE_PATH}/$${PATH}))
 }
-#Функция извлекает значения хеша по ключу
-#TODO название так себе
-# PATH.firstModule = /path/to/first/module
-# PATH.secondModule = /path/to/second/module
-# for(m, MODULES){
-#  INCLUDEPATH += $$MapValue(PATH, $$m)/include    
-# }
+
+## @brief Функция извлекает значения хеша по ключу
+## @note название так себе
+## @example
+## PATH.firstModule = /path/to/first/module
+## PATH.secondModule = /path/to/second/module
+## for(m, MODULES){
+##  INCLUDEPATH += $$MapValue(PATH, $$m)/include    
+## }
 defineReplace(MapValue){
     MAP = $$1
     KEY = $$2
@@ -38,14 +40,35 @@ defineReplace(MapValue){
     eval(result = \$\$$${var})
     return ($$result)
 }
-#Функция вычисляет правильное имя библиотеки для статической либы
-# В зависмимости от платформы
+## @brief Функция вычисляет правильное имя библиотеки для статической либы
+## В зависмимости от платформы и режима сборки
+## @param - имя модуля
 defineReplace(StaticName){
     NAME = $$1
     unix:PREFIX=lib
-    CONFIG(debug, debug|release):SUFFIX+=d
-    unix:SUFFIX += $${SUFFIX}.a
-    win32:SUFFIX += $${SUFFIX}.lib
+    CONFIG(debug, debug|release):SUFFIX = d
 
-    return ($${PREFIX}$${NAME}$${SUFFIX})
+    unix:SUFFIX = $${SUFFIX}.a
+    win32:SUFFIX = $${SUFFIX}.lib
+    RESULT = $${PREFIX}$${NAME}$${SUFFIX} 
+
+    return ($$RESULT)
+}
+
+## @brief Объявить цель make check, которая запустит тест и сгенерирует отчет
+## @note Пригодна только для тестов написанных с GoogleTest library
+## @note make check TESTRUNNER="test-wrapper --timeout 120" TESTARGS="-o result.xml,xunitxml"
+defineTest(ReportGTest) {
+    REPORT_PATH = $$BIN_DIR/../reports/$$replace(TARGET, -test, "").xml
+#используется хак target check рекурсивная и для тех подпроектов,
+#которые ее не объявили заглушена.
+#Если объявить цель с другим именем вызов приведет к ошибке, если прокидывать
+#в подпроектах рекурсивно в тех подкроектах в которых ее нет будет валится ошибка
+    Report.target = check
+    Report.commands = $$BIN_DIR/$$TARGET --gtest_output=xml:$$REPORT_PATH >/dev/null
+    QMAKE_EXTRA_TARGETS += Report
+
+    export(QMAKE_EXTRA_TARGETS)
+    export(Report.target)
+    export(Report.commands)
 }
