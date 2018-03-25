@@ -92,7 +92,8 @@
                     {
                         "index": 0,
                         "items": ["boost", "gtest"]
-                    }
+                    },
+                    "enabled": "%JS{ %test_enable === true}"
                 }
             ]
         }
