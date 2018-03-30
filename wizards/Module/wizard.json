@@ -20,33 +20,18 @@
 
     "options":
     [
+        { "key": "TargetPath", "value": "%{InitialPath}" },
         { "key": "ProjectFilePath",
           "value": "%{JS: '%{BuildSystem}' == 'qmake' ? '%{ProFileName}' : ('%{BuildSystem}' == 'qbs' ? '%{QbsFileName}' : '%{CMakeFileName}') }"
         },
         { "key": "ProFileName",
           "value": "%{JS: Util.fileName('%{ProjectDirectory}/%{ProjectName}', 'pro')}"
         },
-        {
-          "key": "QbsFileName",
-          "value": "%{JS: Util.fileName('%{ProjectDirectory}/%{ProjectName}', 'qbs')}"
-        },
-        {
-          "key": "CMakeFileName",
-          "value": "%{ProjectDirectory}/CMakeLists.txt"
-        },
         { "key": "IsTopLevelProject",
-           "value": "%{JS: !'%{Exists:ProjectExplorer.Profile.Ids}' }"
+            "value": "%{JS: !'%{Exists:ProjectExplorer.Profile.Ids}' }"
         },
-        { "key": "MainCppName",
-          "value": "%{JS: 'main.' + Util.preferredSuffix('text/x-c++src') }"
-        },
-        {
-          "key": "TestCaseFileWithHeaderSuffix",
-          "value": "%{JS: 'tst_%{TestCaseName}.'.toLowerCase() + Util.preferredSuffix('text/x-c++hdr') }"
-        },
-        {
-          "key": "TestCaseFileWithCppSuffix",
-          "value": "%{JS: 'tst_%{TestCaseName}.'.toLowerCase() + Util.preferredSuffix('text/x-c++src') }"
+        { "key": "DefineFile",
+          "value": "../../vars.pri"
         }
     ],
 
@@ -67,7 +52,7 @@
             "data":
             [
                 {
-                    "name": "module_name",
+                    "name": "ModuleName",
                     "trDisplayName": "Module name:",
                     "type": "LineEdit",
                     "data": {
@@ -75,7 +60,7 @@
                     }
                 },
                 {
-                    "name": "test_enable",
+                    "name": "TestEnabled",
                     "trDisplayName": "Enable tests",
                     "type": "CheckBox",
                     "data": {
@@ -85,7 +70,7 @@
                     }
                 },
                 {
-                    "name": "test_type",
+                    "name": "TestType",
                     "trDisplayName": "Test type:",
                     "type": "ComboBox",
                     "data":
@@ -93,9 +78,14 @@
                         "index": 0,
                         "items": ["boost", "gtest"]
                     },
-                    "enabled": "%JS{ %test_enable === true}"
+                    "enabled": "%{JS: '%TestEnabled' === true}"
                 }
             ]
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
         }
     ],
     "generators":
@@ -105,27 +95,36 @@
             "data":
             [
                 {
-                    "source": "files/tst.pro",
-                    "target": "%{ProjectFilePath}",
-                    "condition": "%{JS: '%{BuildSystem}' == 'qmake'}",
+                    "source": "files/Module.pro",
+                    "target": "%{ModuleName}/Module/Module.pro",
                     "openInEditor": false,
-                    "openAsProject": true
+                    "openAsProject": false
                 },
                 {
-                    "source": "files/tst.qbs",
-                    "target": "%{ProjectFilePath}",
-                    "condition": "%{JS: '%{BuildSystem}' == 'qbs'}",
+                    "source": "files/Test.pro",
+                    "target": "%{ModuleName}/%{ModuleName}/%{ModuleName}.pro",
                     "openInEditor": false,
-                    "openAsProject": true
+                    "openAsProject": false
                 },
                 {
-                    "source": "files/tst.txt",
-                    "target": "CMakeLists.txt",
-                    "condition": "%{JS: '%{BuildSystem}' == 'cmake'}",
+                    "source": "files/TopModule.pro",
+                    "target": "%{ModuleName}/%{ModuleName}.pro",
                     "openInEditor": false,
-                    "openAsProject": true
+                    "openAsProject":false
+                },
+                {
+                    "source": "files/config.pri",
+                    "target": "%{ModuleName}/config.pri",
+                    "openInEditor":false,
+                    "openAsProject":false
+                },
+                {
+                    "source": "files/boost_main.cpp",
+                    "target": "%{ModuleName}/%{ModuleName}/src/main.cpp",
+                    "openInEditor":true,
+                    "openAsProject":false
                 }
-                
+
             ]
         }
     ]
