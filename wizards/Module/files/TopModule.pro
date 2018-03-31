@@ -1,5 +1,5 @@
 load(tools/common)
-@if "{%TestEnabled}" === "true"
+@if "{%TestEnabled}"
 Module(%{ModuleName})
 @else 
 Module()
