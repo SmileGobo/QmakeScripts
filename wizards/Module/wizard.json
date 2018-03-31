@@ -65,8 +65,8 @@
                     "type": "CheckBox",
                     "data": {
                         "checked": true,
-                        "checkedValue": "true",
-                        "uncheckedValue": "false"        
+                        "checkedValue": true,
+                        "uncheckedValue": false       
                     }
                 },
                 {
@@ -78,7 +78,7 @@
                         "index": 0,
                         "items": ["boost", "gtest"]
                     },
-                    "enabled": "%{JS: '%TestEnabled' === true}"
+                    "enabled": "%{TestEnabled}"
                 }
             ]
         },
@@ -101,12 +101,6 @@
                     "openAsProject": false
                 },
                 {
-                    "source": "files/Test.pro",
-                    "target": "%{ModuleName}/%{ModuleName}/%{ModuleName}.pro",
-                    "openInEditor": false,
-                    "openAsProject": false
-                },
-                {
                     "source": "files/TopModule.pro",
                     "target": "%{ModuleName}/%{ModuleName}.pro",
                     "openInEditor": false,
@@ -117,6 +111,13 @@
                     "target": "%{ModuleName}/config.pri",
                     "openInEditor":false,
                     "openAsProject":false
+                }, 
+                {
+                    "source": "files/Test.pro",
+                    "target": "%{ModuleName}/%{ModuleName}/%{ModuleName}.pro",
+                    "openInEditor": false,
+                    "openAsProject": false,
+                    "condition": "%{TestEnabled}"
                 },
                 {
                     "source": "files/boost_main.cpp",
