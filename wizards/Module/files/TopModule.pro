@@ -1,6 +1,6 @@
 load(tools/common)
 @if "{%TestEnabled}"
-Module(%{ModuleName})
+Module(%{Module.Name})
 @else 
 Module()
 @endif

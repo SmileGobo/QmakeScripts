@@ -1,9 +1,10 @@
-load(tools/common)
-exists(%{DefineFile}){
-include(%{DefineFile})
-})
+include(%{JS: Util.relativeFilePath("%{PathTo.ProjectConfig}", "%{PathTo.UnitTest}")})
+include(%{JS: Util.relativeFilePath("%{PathTo.ModuleRoot}/%{Module.ConfigFile}", "%{PathTo.UnitTest}")})
 
-Init($$BASE_PATH)
-include(./../config.pri)
-ConsoleApplication(%{ModuleName}-test)
+ConsoleApplication(%{JS: "%{Module.Name}-test".toLowerCase()})
 
+ImportModules($$LOCAL_DEPS)
+ImportModules($$EXT_DEPS1.list, $$EXT_DEPS1.prefix)
+
+SOURCES = \
+    src/main.cpp

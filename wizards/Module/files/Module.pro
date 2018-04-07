@@ -1,9 +1,5 @@
-load(tools/common)
-exists(%{DefineFile}){
-include(%{DefineFile})
-}
 
+include(%{JS: Util.relativeFilePath("%{PathTo.ProjectConfig}", "%{PathTo.Module}")})
+include(%{JS: Util.relativeFilePath("%{PathTo.ModuleRoot}/%{Module.ConfigFile}", "%{PathTo.Module}")})
 
-Init($$BASE_PATH)
-include(./../config.pri)
 StaticLibrary($$MODULE_NAME)

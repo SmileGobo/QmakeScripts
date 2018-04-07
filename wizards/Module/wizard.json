@@ -30,8 +30,20 @@
         { "key": "IsTopLevelProject",
             "value": "%{JS: !'%{Exists:ProjectExplorer.Profile.Ids}' }"
         },
-        { "key": "DefineFile",
-          "value": "../../vars.pri"
+        { "key": "ProjectConfigFile",
+          "value": "vars.pri"
+        },
+        {
+            "key": "PathTo.ModuleRoot",
+            "value": "%{InitialPath}/%{Module.Name}"
+        },
+        {
+            "key": "PathTo.Module",
+            "value": "%{PathTo.ModuleRoot}/Module"
+        },
+        {
+            "key": "PathTo.UnitTest",
+            "value": "%{InitialPath}/%{Module.Name}/%{Module.Name}"
         }
     ],
 
@@ -52,7 +64,7 @@
             "data":
             [
                 {
-                    "name": "ModuleName",
+                    "name": "Module.Name",
                     "trDisplayName": "Module name:",
                     "type": "LineEdit",
                     "data": {
@@ -79,6 +91,56 @@
                         "items": ["boost", "gtest"]
                     },
                     "enabled": "%{TestEnabled}"
+                },
+                {
+                    "name": "ModulesRoot",
+                    "trDisplayName": "Modules root dir",
+                    "enabled": false,
+                    "type": "PathChooser",
+                    "data": {
+                        "path": "%{InitialPath}"
+                    }
+                }
+            ]
+        },
+        {
+            "trDisplayName": {
+                "C": "Configs",
+                "en_EN": "Module details",
+                "ru_RU": "Пути к файлам конфигурации" 
+            },
+            "trShortTitle": {
+                "C": "Configs Path",
+                "en_EN": "Configs Path",
+                "ru_RU":"Конфигурации"
+            },
+            "typeId": "Fields",
+            "data": [
+                {
+                    "name": "PathTo.ProjectConfig",
+                    "trDisplayName": "Project config:",
+                    "type": "PathChooser",
+                    "data": {
+                        "path": "%{InitialPath}/%{ProjectConfigFile}",
+                        "kind": "file"
+                    }
+                },
+                {
+                    "name": "ModuleConfigDir",
+                    "trDisplayName": "Module config dir:",
+                    "type": "PathChooser",
+                    "data": {
+                        "path": "%{InitialPath}/%{Module.Name}",
+                        "kind": "directory"
+                    }
+                },
+                {
+                    "name": "Module.ConfigFile",
+                    "trDisplayName": "Module config file",
+                    "type": "LineEdit",
+                    "data": {
+                        "trText": "mconfig.pri"
+                    }
                 }
             ]
         },
@@ -96,36 +158,35 @@
             [
                 {
                     "source": "files/Module.pro",
-                    "target": "%{ModuleName}/Module/Module.pro",
+                    "target": "%{Module.Name}/Module/Module.pro",
                     "openInEditor": false,
                     "openAsProject": false
                 },
                 {
                     "source": "files/TopModule.pro",
-                    "target": "%{ModuleName}/%{ModuleName}.pro",
+                    "target": "%{Module.Name}/%{Module.Name}.pro",
                     "openInEditor": false,
                     "openAsProject":false
                 },
                 {
-                    "source": "files/config.pri",
-                    "target": "%{ModuleName}/config.pri",
+                    "source": "files/%{Module.ConfigFile}",
+                    "target": "%{Module.Name}/%{Module.ConfigFile}",
                     "openInEditor":false,
                     "openAsProject":false
                 }, 
                 {
                     "source": "files/Test.pro",
-                    "target": "%{ModuleName}/%{ModuleName}/%{ModuleName}.pro",
+                    "target": "%{Module.Name}/%{Module.Name}/%{Module.Name}.pro",
                     "openInEditor": false,
                     "openAsProject": false,
                     "condition": "%{TestEnabled}"
                 },
                 {
                     "source": "files/boost_main.cpp",
-                    "target": "%{ModuleName}/%{ModuleName}/src/main.cpp",
+                    "target": "%{Module.Name}/%{Module.Name}/src/main.cpp",
                     "openInEditor":true,
                     "openAsProject":false
                 }
-
             ]
         }
     ]
