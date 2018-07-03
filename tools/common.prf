@@ -2,9 +2,7 @@ load(tools/project)
 load(tools/depend)
 load(tools/util)
 
-
-#инициализация вызвать в начале проекта
-#пока используется include(settings.pri)
+#инициализация вызвать в начале под проекта(модуля, теста, приложения)
 defineTest(Init){
     OUT_DIR = $$1
     isEmpty(OUT_DIR){
@@ -83,12 +81,14 @@ defineTest(SetDeploy){
     return(true)
 }
 
-#установка билиотеки в SDK
-#$$1 - PREFIX базовый путь
-#установка произойдет в
-#<SDK_PATH>/<TARGET>/lib/ - библиотеки
-#<SDK_PATH>/<TARGET>/include/ - заголовочные файлы
-#TARGET платформа объявленная в MKSPEC в переменной $$_TARGET
+## @brief установка билиотеки по указанному пути 
+## @param PREFIX корень установки
+## установка произойдет в
+## <PREFIX>/<_TARGET>/lib/ - библиотеки
+## <PREFIX>/<_TARGET>/include/ - заголовочные файлы
+## _TARGET платформа объявленная в MKSPEC в переменной $$_TARGET если ее не будет путь будет короче
+## @note возьмет только хидеры из include директории(располагать публичные там)
+## приватные в src
 defineTest(InstallSDK){
 
     !CONFIG(staticlib){
